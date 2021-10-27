@@ -34,9 +34,9 @@ namespace Lab1
                 for (int x = 0; x < width; x++)
                 {
                     double cos = 1;
-                    foreach (var vecotr in Vectors)
+                    foreach (var vector in Vectors)
                     {
-                        cos *= Math.Cos(vecotr.Point.X * x + vecotr.Point.Y * y);
+                        cos *= Math.Cos(vector.ValuePoint.X * x + vector.ValuePoint.Y * y);
                     }
 
                     int brightness = Convert.ToInt32(127 + 50 * cos);
@@ -56,7 +56,7 @@ namespace Lab1
                 foreach (var vector in Vectors)
                 {
                     Pen pen = new Pen(Color.OrangeRed, 3f);
-                    Utils.DrawArrow(graphics, pen, axisCenter, vector.DisplayPoint.Sum(axisCenter), 20);
+                    Utils.DrawArrow(graphics, pen, axisCenter, vector.DisplayPoint.ToPointF().Sum(axisCenter), 20);
                 }
             }
         }

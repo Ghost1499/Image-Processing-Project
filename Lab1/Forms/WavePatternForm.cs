@@ -50,7 +50,7 @@ namespace Lab1
             {
                 WavePattern.ChangeVector(index, vector);
                 Bitmap = new Bitmap(Bitmap.Width,Bitmap.Height);
-                DrawVectors(Bitmap);
+                drawWavePatternButton.PerformClick();
             }
         }
 

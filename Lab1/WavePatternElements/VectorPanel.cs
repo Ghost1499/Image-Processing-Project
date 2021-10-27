@@ -85,22 +85,22 @@ namespace Lab1.WavePatternElements
         {
             VectorDeleted?.Invoke(this);
         }
-        private void VariablePanel_ValueChanged(object sender,float value)
+        private void VariablePanel_ValueChanged(object sender,int value)
         {
             Type expType = typeof(VariablePanel);
             if(sender!=null && sender.GetType() == expType)
             {
                 VariablePanel variablePanel = sender as VariablePanel;
                 bool ind = false;
-                PointF newPoint = PointF.Empty;
+                Point newPoint = Point.Empty;
                 if (variablePanel.Equals(XVariablePanel))
                 {
-                    newPoint = new PointF(value, Vector.DisplayPoint.Y);
+                    newPoint = new Point(value, Vector.DisplayPoint.Y);
                     ind = true;
                 }
                 else if (variablePanel.Equals(YVariablePanel))
                 {
-                    newPoint = new PointF(Vector.DisplayPoint.X,value);
+                    newPoint = new Point(Vector.DisplayPoint.X,value);
                     ind = true;
                 }
                 if (ind)

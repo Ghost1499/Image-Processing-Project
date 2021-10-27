@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace Lab1.WavePatternElements
         Label NameLabel { get; }
         TextBox TextBox { get; }
         TrackBar TrackBar { get; }
-        public event Action<object,float> ValueChanged;
+        public event Action<object,int> ValueChanged;
 
         public VariablePanel(string name,float value,float max)
         {
@@ -59,6 +60,7 @@ namespace Lab1.WavePatternElements
 
         private void TrackBar_Scroll(object sender, EventArgs e)
         {
+            //Debug.WriteLine("TrackBar_Scroll");
             Type expectedType = TrackBar.GetType();
             if (sender?.GetType() == expectedType)
             {
@@ -69,7 +71,7 @@ namespace Lab1.WavePatternElements
         void changeValue(object sender,int value)
         {
             TextBox.Text= value.ToString();
-            ValueChanged?.Invoke(sender,intToFloat(value));
+            ValueChanged?.Invoke(sender,value);
 
         }
         static int floatToInt(float value)
