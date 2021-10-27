@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Lab1
 {
-    public static class ColorExtensions
+    public static class Extensions
     {
         public static Color Multiply(this Color color1, Color color2)
         {
@@ -45,9 +45,20 @@ namespace Lab1
 
 
     }
+    public static class PointExtensions
+    {
+        public static PointF ToPointF(this Point point)
+        {
+            return point;
+        }
 
+    }
     public static class PointFExtensions
     {
+        public static Point ToPoint(this PointF point)
+        {
+            return new Point(Convert.ToInt32(point.X) , Convert.ToInt32(point.Y) );
+        }
         public static PointF Sum(this PointF point, PointF other)
         {
             return new PointF(point.X + other.X, point.Y + other.Y);
@@ -85,6 +96,15 @@ namespace Lab1
         public static float GetLength(this PointF point)
         {
             return Convert.ToSingle(Math.Sqrt(point.X * point.X + point.Y * point.Y));
+        }
+
+        public static float GetAngle(this PointF point)
+        {
+            return Convert.ToSingle(Math.Atan2(point.Y, point.X));
+        }
+        public static int GetAngleDegrees(this PointF point)
+        {
+            return Convert.ToInt32(Math.Atan2(point.Y, point.X)/2/Math.PI*359);
         }
     }
 }

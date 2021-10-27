@@ -36,7 +36,7 @@ namespace Lab1
                     double cos = 1;
                     foreach (var vecotr in Vectors)
                     {
-                        cos *= Math.Cos(vecotr.Point.X * x + vecotr.Point.Y * y);
+                        cos *= Math.Cos(vecotr.ValuePoint.X * x + vecotr.ValuePoint.Y * y);
                     }
 
                     int brightness = Convert.ToInt32(127 + 50 * cos);

@@ -9,29 +9,67 @@ namespace Lab1.WavePatternElements
 {
     public struct Vector
     {
-        public static Vector Empty=new Vector(PointF.Empty,0);
-        public PointF Point { get; }
-        public float Scale { get; }
-        public PointF DisplayPoint { get; }
+        public static Vector Empty = new Vector(PointF.Empty, 0);
+        private PointF _valuePoint;
 
-        public Vector(PointF point,float scale)
+        public PointF ValuePoint { get => _valuePoint; private set => _valuePoint = value; }
+        public float Scale { get; }
+        public Point DisplayPoint { get;}
+        public float ValueLength
         {
-            bool d=PointF.Empty == point;
-            Point = point;
+            get => ValuePoint.GetLength();
+            set
+            {
+                if (value>0)
+                {
+                    _valuePoint.X = Convert.ToSingle(value * Math.Cos(ValueAngle));
+                    _valuePoint.Y = Convert.ToSingle(value * Math.Sin(ValueAngle));
+
+                }
+            }
+        }
+        public float ValueAngle { get => ValuePoint.GetAngle();
+            set
+            {
+                value %= Convert.ToSingle(2 * Math.PI);
+                if (value != 0)
+                {
+                    _valuePoint.X = Convert.ToSingle(ValueLength * Math.Cos(value));
+                    _valuePoint.Y = Convert.ToSingle(ValueLength * Math.Sin(value));
+                }
+            }
+        }
+        public float ValueAngleDegrees { get => ValuePoint.GetAngleDegrees(); }
+        public float DisplayLength { get => DisplayPoint.ToPointF().GetLength(); }
+        public float DisplayAngle { get => DisplayPoint.ToPointF().GetAngle(); }
+        public float DisplayAngleDegrees { get => DisplayPoint.ToPointF().GetAngleDegrees(); }
+
+        public Vector(PointF point, float scale)
+        {
+            _valuePoint = point;
             Scale = scale;
-            DisplayPoint = point.Multiply(scale);
+            DisplayPoint = point.Multiply(scale).ToPoint();
         }
-        public PointF DisplayToValue(PointF display)
+
+        public void Rotate(float angle)
         {
-            return display.Multiply(1/Scale);
+            ValueAngle += angle;
         }
-        public PointF ValueToDisplay(PointF value)
+        public PointF DisplayToValue(Point display)
         {
-            return value.Multiply(Scale);
+            return ((PointF)display).Multiply(1 / Scale);
         }
-        public static bool operator ==(Vector vector,Vector other)
+        public float DisplayToValue(int display)
         {
-            return vector.Point == other.Point && vector.Scale == other.Scale;
+            return display/Scale;
+        }
+        public Point ValueToDisplay(PointF value)
+        {
+            return value.Multiply(Scale).ToPoint();
+        }
+        public static bool operator ==(Vector vector, Vector other)
+        {
+            return vector.ValuePoint == other.ValuePoint && vector.Scale == other.Scale;
         }
         public static bool operator !=(Vector vector, Vector other)
         {
