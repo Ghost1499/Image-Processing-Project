@@ -14,24 +14,25 @@ namespace Lab1
     public partial class WavePatternForm : Form
     {
         Bitmap Bitmap { get; set; }
+        Bitmap WaveBitmap { get; set; }
         WavePattern WavePattern { get; set; }
         VectorsControlPanel VectorsControlPanel { get; set; }
 
         public WavePatternForm()
         {
             InitializeComponent();
-            WavePattern = new WavePattern();
+            int maxDisplay = imagePanel.Width > imagePanel.Height ? imagePanel.Height / 2 : imagePanel.Width / 2;
+            maxDisplay = 400;
+            WavePattern = new WavePattern(maxDisplay);
             initGui();
-
-            //CreateVectorPanels();
         }
         private void initGui()
         {
-            VectorsControlPanel = new VectorsControlPanel(WavePattern.Vectors, WavePattern.MaxCDisplay);
+            VectorsControlPanel = new VectorsControlPanel(WavePattern.Vectors, WavePattern.maxDisplay);
+            VectorsControlPanel.Dock = DockStyle.Fill;
             VectorsControlPanel.VectorChanged += VectorsControlPanel_VectorChanged;
             VectorsControlPanel.VectorDeleted += VectorsControlPanel_VectorDeleted; ;
-            mainSplitContainer.Panel1.Controls.Add(VectorsControlPanel);
-            //controlVectorsPanel.Controls.Add()
+            splitContainer1.Panel1.Controls.Add(VectorsControlPanel);
         }
 
         private void VectorsControlPanel_VectorDeleted(object sender, int index)
@@ -39,8 +40,7 @@ namespace Lab1
             if (sender?.GetType() == VectorsControlPanel.GetType())
             {
                 WavePattern.RemoveVector(index);
-                Bitmap = new Bitmap(Bitmap.Width, Bitmap.Height);
-                DrawVectors(Bitmap);
+                DrawVectors();
             }
         }
 
@@ -49,50 +49,54 @@ namespace Lab1
             if (sender?.GetType() == VectorsControlPanel.GetType())
             {
                 WavePattern.ChangeVector(index, vector);
-                Bitmap = new Bitmap(Bitmap.Width,Bitmap.Height);
-                drawWavePatternButton.PerformClick();
+                DrawVectors();
             }
         }
-
-        public void DrawWavePattern(Bitmap bitmap)
+        public void DrawAll()
         {
-            WavePattern.DrawPattern(bitmap);
-            mainPictureBox.Image = bitmap;
+            drawWavePattern();
+            DrawVectors();
+
+        }
+        private void drawWavePattern()
+        {
+            if(WaveBitmap is null)
+                WaveBitmap = new Bitmap(imagePanel.Width, imagePanel.Height);
+            WavePattern.DrawPattern(WaveBitmap);
+            //mainPictureBox.Image = WaveBitmap;
+            //WaveBitmap = new Bitmap(Bitmap);
         }
 
-        public void DrawVectors(Bitmap bitmap)
+        private void DrawVectors()
         {
-            WavePattern.DrawVectors(bitmap);
-            mainPictureBox.Image = bitmap;
+            Bitmap oldBitmap = Bitmap;
+            Bitmap = (Bitmap)WaveBitmap.Clone();
+            oldBitmap?.Dispose();
+            WavePattern.DrawVectors(Bitmap);
+
+            mainPictureBox.Image = Bitmap;
         }
 
-        private void imagePanel_Paint(object sender, PaintEventArgs e)
-        {
-            Bitmap = new Bitmap(imagePanel.Width, imagePanel.Height);
-            DrawWavePattern(Bitmap);
-            DrawVectors(Bitmap);
-        }
 
         private void drawWavePatternButton_Click(object sender, EventArgs e)
         {
-            DrawWavePattern(Bitmap);
-            DrawVectors(Bitmap);
+            DrawAll();
+        }
+        
+        private void mainPictureBox_Paint(object sender, PaintEventArgs e)
+        {
+            if (Bitmap is null)
+                DrawAll();
         }
 
-        private void WavePatternForm_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                drawWavePatternButton.PerformClick();
-            }
-        }
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == Keys.Enter)
             {
-                drawWavePatternButton.PerformClick();
+                DrawAll();
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
+
     }
 }

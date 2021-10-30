@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab1
+namespace Lab1.Utils
 {
-    public static class Extensions
+    public static class ColorExtensions
     {
         public static Color Multiply(this Color color1, Color color2)
         {
-            return Color.FromArgb(Utils.ScaleColorsMultiply(color1.R, color2.R), Utils.ScaleColorsMultiply(color1.G, color2.G), Utils.ScaleColorsMultiply(color1.B, color2.B));
+            return Color.FromArgb(MathUtils.ScaleColorsMultiply(color1.R, color2.R), MathUtils.ScaleColorsMultiply(color1.G, color2.G), MathUtils.ScaleColorsMultiply(color1.B, color2.B));
         }
 
         public static Color Multiply(this Color color,double value)
@@ -21,7 +21,7 @@ namespace Lab1
 
         public static double[] MultiplyArr(this Color color1, Color color2)
         {
-            return new double[] { Utils.Multiply(color1.R, color2.R), Utils.Multiply(color1.G, color2.G), Utils.Multiply(color1.B, color2.B) };
+            return new double[] { MathUtils.Multiply(color1.R, color2.R), MathUtils.Multiply(color1.G, color2.G), MathUtils.Multiply(color1.B, color2.B) };
         }
 
         public static double[] MultiplyArr(this Color color, double value)
@@ -51,6 +51,7 @@ namespace Lab1
         {
             return point;
         }
+
 
     }
     public static class PointFExtensions

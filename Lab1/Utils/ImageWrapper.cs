@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab1
+namespace Lab1.Utils
 {
     /// <summary>
     /// Обертка над Bitmap для быстрого чтения и изменения пикселов.

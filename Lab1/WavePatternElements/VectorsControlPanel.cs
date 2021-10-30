@@ -10,11 +10,11 @@ namespace Lab1.WavePatternElements
     public class VectorsControlPanel : Panel
     {
         List<VectorPanel> VectorPanels { get; set; }
-        public float Max { get; }
+        public int Max { get; }
         public event Action<object, int, Vector> VectorChanged;
         public event Action<object, int> VectorDeleted;
 
-        public VectorsControlPanel(IEnumerable<Vector> vectors,float max)
+        public VectorsControlPanel(IEnumerable<Vector> vectors,int max)
         {
             Max = max;
             VectorPanels = new List<VectorPanel>();
@@ -30,16 +30,15 @@ namespace Lab1.WavePatternElements
 
         void initGui()
         {
-            Dock = DockStyle.Fill;
             BorderStyle = BorderStyle.FixedSingle;
-
+            AutoScroll = true;
         }
         void addVector(Vector vector)
         {
             int number=VectorPanels.Count;
             addVectorPanel(number, vector,Max);
         }
-        void addVectorPanel(int number,Vector vector,float max)
+        void addVectorPanel(int number,Vector vector,int max)
         {
             VectorPanel vectorPanel = new VectorPanel(number,vector,max);
             vectorPanel.Dock = DockStyle.Top;

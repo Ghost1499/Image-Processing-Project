@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lab1.Utils;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -10,13 +11,14 @@ namespace Lab1.WavePatternElements
 {
     public class VectorPanel : Panel
     {
-        Label NumberLabel{ get; }
+        Label NumberLabel { get; }
         VariablePanel XVariablePanel { get; set; }
         VariablePanel YVariablePanel { get; set; }
+        VariablePanel LengthVariablePanel { get; set; }
+        VariablePanel AngleVariablePanel { get; set; }
         Button DeleteButton { get; set; }
         public int Number { get; private set; }
         public Vector Vector { get; private set; }
-        public float Max { get; }
         public event Action<VectorPanel, Vector> VectorChanged;
         public event Action<VectorPanel> VectorDeleted;
 
@@ -25,15 +27,23 @@ namespace Lab1.WavePatternElements
             Number = number;
             NumberLabel.Text = Number.ToString();
         }
-
-        public VectorPanel(int number,Vector vector,float max)
+        private void updateVector(Vector vector)
+        {
+            Vector = vector;
+            XVariablePanel.SetValue(vector.DisplayPoint.X);
+            YVariablePanel.SetValue(vector.DisplayPoint.Y);
+            LengthVariablePanel.SetValue(vector.DisplayLength);
+            AngleVariablePanel.SetValue(vector.AngleDegrees);
+        }
+        public VectorPanel(int number, Vector vector, int max)
         {
             Number = number;
             Vector = vector;
-            Max = max;
             NumberLabel = new Label();
-            XVariablePanel = new VariablePanel("X",vector.DisplayPoint.X, Max);
-            YVariablePanel = new VariablePanel("Y",vector.DisplayPoint.Y, Max);
+            XVariablePanel = createVariablePanel("X", vector.DisplayPoint.X, -max, max);
+            YVariablePanel = createVariablePanel("Y", vector.DisplayPoint.Y, -max, max);
+            LengthVariablePanel = createVariablePanel("Length", vector.DisplayLength, 0, max);
+            AngleVariablePanel = createVariablePanel("Phi", vector.AngleDegrees, -180, 180);
             DeleteButton = new Button();
 
             initGui();
@@ -42,6 +52,8 @@ namespace Lab1.WavePatternElements
 
 
             Controls.AddRange(new Control[] {
+                AngleVariablePanel,
+                LengthVariablePanel,
             YVariablePanel,
             XVariablePanel,
             NumberLabel,
@@ -51,7 +63,7 @@ namespace Lab1.WavePatternElements
         void initGui()
         {
             //AutoSizeMode = AutoSizeMode.GrowOnly;
-            //AutoSize = true;
+            AutoSize = true;
             BorderStyle = BorderStyle.FixedSingle;
 
 
@@ -60,23 +72,25 @@ namespace Lab1.WavePatternElements
             NumberLabel.Font = new Font(NumberLabel.Font.FontFamily, 16, FontStyle.Bold);
             NumberLabel.AutoSize = true;
 
-            XVariablePanel.Dock = DockStyle.Top;
-            YVariablePanel.Dock = DockStyle.Top;
-
             DeleteButton.Text = "x";
-            DeleteButton.Font= new Font(DeleteButton.Font.FontFamily, 14, FontStyle.Bold);
+            DeleteButton.Font = new Font(DeleteButton.Font.FontFamily, 14, FontStyle.Bold);
             DeleteButton.AutoSize = true;
             DeleteButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             DeleteButton.Dock = DockStyle.Right;
             DeleteButton.Click += DeleteButton_Click;
 
-            XVariablePanel.ValueChanged += VariablePanel_ValueChanged;
-            YVariablePanel.ValueChanged += VariablePanel_ValueChanged;
-
-            Height = NumberLabel.Height*4;
+            Height = NumberLabel.Height * 4;
 
         }
 
+        private VariablePanel createVariablePanel(string name,int value,int min,int max)
+        {
+            VariablePanel variablePanel = new VariablePanel(name, value, min, max);
+            variablePanel.Dock = DockStyle.Top;
+            variablePanel.Height = Convert.ToInt32(variablePanel.Height / 1.5);
+            variablePanel.ValueChanged += VariablePanel_ValueChanged;
+            return variablePanel;
+        }
         private void DeleteButton_Click(object sender, EventArgs e)
         {
             VectorDeleted?.Invoke(this);
@@ -85,29 +99,38 @@ namespace Lab1.WavePatternElements
         {
             VectorDeleted?.Invoke(this);
         }
-        private void VariablePanel_ValueChanged(object sender,int value)
+        private void VariablePanel_ValueChanged(object sender, int value)
         {
             Type expType = typeof(VariablePanel);
-            if(sender!=null && sender.GetType() == expType)
+            if (sender != null && sender.GetType() == expType)
             {
                 VariablePanel variablePanel = sender as VariablePanel;
                 bool ind = false;
-                Point newPoint = Point.Empty;
+                Vector vector = new Vector(Vector);
                 if (variablePanel.Equals(XVariablePanel))
                 {
-                    newPoint = new Point(value, Vector.DisplayPoint.Y);
+                    vector.ValuePoint = new PointD(Vector.DisplayToValue(value), Vector.ValuePoint.Y);
                     ind = true;
                 }
                 else if (variablePanel.Equals(YVariablePanel))
                 {
-                    newPoint = new Point(Vector.DisplayPoint.X,value);
+                    vector.ValuePoint = new PointD(Vector.ValuePoint.X, Vector.DisplayToValue(value));
+                    ind = true;
+                }
+                else if (variablePanel.Equals(LengthVariablePanel))
+                {
+                    vector.ValueLength = Vector.DisplayToValue(value);
+                    ind = true;
+                }
+                else if (variablePanel.Equals(AngleVariablePanel))
+                {
+                    vector.Angle = MathUtils.DegreesToRadians(value);
                     ind = true;
                 }
                 if (ind)
                 {
-                    Vector vector = new Vector(Vector.DisplayToValue(newPoint), Vector.Scale);
                     VectorChanged?.Invoke(this, vector);
-                    Vector = vector;
+                    updateVector(vector);
                 }
 
             }

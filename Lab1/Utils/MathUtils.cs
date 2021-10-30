@@ -6,9 +6,9 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab1
+namespace Lab1.Utils
 {
-    public static class Utils
+    public static class MathUtils
     {
         public static byte ScaleColorsMultiply(byte color1, byte color2)
         {
@@ -218,6 +218,19 @@ namespace Lab1
         public static void DrawLineFromPoint(Graphics graphics, Pen pen, PointF start, PointF vector)
         {
             graphics.DrawLine(pen, start, new PointF(start.X + vector.X , start.Y + vector.Y ));
+        }
+
+        public static double DegreesToRadians(int degrees)
+        {
+            double radians=degrees/360.0*2*Math.PI;
+            return radians;
+        }
+
+        public static int RadiansToDegrees(double radians)
+        {
+            double doublePI = 2 * Math.PI;
+            int degrees = Convert.ToInt32(radians/ doublePI * 360);
+            return degrees;
         }
     }
 }

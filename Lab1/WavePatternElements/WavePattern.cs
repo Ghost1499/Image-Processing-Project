@@ -1,4 +1,5 @@
-﻿using Lab1.WavePatternElements;
+﻿using Lab1.Utils;
+using Lab1.WavePatternElements;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,21 +11,39 @@ namespace Lab1
 {
     public class WavePattern
     {
-        // чем больше с, тем меньше узоры
-        float c;
-        public const float maxC= 0.5f;
-        public float MaxCDisplay { get => maxC*scale; }
-        const float minC= 0.05f;
-        const int minVectorPixelLength = 50;
-        const float scale = 1 / minC * minVectorPixelLength;
+        const double PI = Math.PI;
+        double W { get; set; } // частота
+        double T { get => 2 * Math.PI / W; set => W= 2 * Math.PI / value; } //период (в пикселях)
+        public const double maxT = 32 * PI;
+        public const double minT = 8*PI;
+        public static readonly double maxW = getW(minT);
+        public static readonly double minW = getW(maxT);
+        public int maxDisplay = 600;
+        float displayScale;
 
-        public List<Vector> Vectors { get;private set; } //= new PointF[] { new PointF(d, d), new PointF(d, -d), new PointF(0, c), new PointF(c, 0) };
-        public WavePattern()
+        static double getT(double w)
         {
-            c = 0.25f;
-            float d = Convert.ToSingle(Math.Sqrt(c * c / 2));
-            Vectors = new List<Vector> {new Vector(new PointF(d, d),scale), new Vector(new PointF(d, -d), scale), new Vector(new PointF(0,c), scale), new Vector(new PointF(c, 0), scale)};
-
+            return 2 * Math.PI / w;
+        }
+        static double getW(double t)
+        {
+            return 2 * Math.PI / t;
+        }
+        public List<Vector> Vectors { get; private set; } //= new PointF[] { new PointF(d, d), new PointF(d, -d), new PointF(0, c), new PointF(c, 0) };
+        public WavePattern(int maxDisplay)
+        {
+            this.maxDisplay = maxDisplay;
+            displayScale = Convert.ToSingle(maxDisplay / maxW);
+            T = 20*PI;
+            PointD point = new PointD(W, 0);
+            Vector vector0 = new Vector(point, displayScale);
+            Vector vector90 = new Vector(vector0);
+            vector90.Rotate(90);
+            Vector vector45 = new Vector(vector0);
+            vector45.Rotate(45);
+            Vector vector45n = new Vector(vector0);
+            vector45n.Rotate(-45);
+            Vectors = new List<Vector> { vector0, vector90, vector45, vector45n };
         }
         public void DrawPattern(Bitmap bitmap)
         {
@@ -51,33 +70,33 @@ namespace Lab1
             int width = bitmap.Width, height = bitmap.Height;
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
-                Utils.DrawAxis(graphics, width, height);
+                MathUtils.DrawAxis(graphics, width, height);
                 PointF axisCenter = new PointF(width / 2, height / 2);
+                Pen pen = new Pen(Color.OrangeRed, 3f);
                 foreach (var vector in Vectors)
                 {
-                    Pen pen = new Pen(Color.OrangeRed, 3f);
-                    Utils.DrawArrow(graphics, pen, axisCenter, vector.DisplayPoint.ToPointF().Sum(axisCenter), 20);
+                    MathUtils.DrawArrow(graphics, pen, axisCenter, vector.DisplayPoint.ToPointF().Sum(axisCenter), 20);
                 }
             }
         }
 
         public void AddVector(Vector vector)
         {
-            if (vector !=Vector.Empty)
+            if (vector != Vector.Empty)
             {
                 Vectors.Add(vector);
             }
         }
         public void RemoveVector(int index)
         {
-            if (index>=0 && index<Vectors.Count)
+            if (index >= 0 && index < Vectors.Count)
             {
                 Vectors.RemoveAt(index);
             }
         }
-        public void ChangeVector(int index,Vector vector)
+        public void ChangeVector(int index, Vector vector)
         {
-            if (index >= 0 && index < Vectors.Count &&vector!=Vector.Empty)
+            if (index >= 0 && index < Vectors.Count && vector != Vector.Empty)
             {
                 Vectors[index] = vector;
             }
