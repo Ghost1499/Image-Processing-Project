@@ -155,7 +155,7 @@ namespace Lab1
 
         private void mainSplitContainer_Panel2_Paint(object sender, PaintEventArgs e)
         {
-            wavePatternButton_Click(this, null);
+            //wavePatternButton_Click(this, null);
         }
     }
 
