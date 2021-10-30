@@ -11,6 +11,8 @@ namespace Lab1.WavePatternElements
 {
     public class VectorPanel : Panel
     {
+        private Vector _vector;
+
         Label NumberLabel { get; }
         VariablePanel XVariablePanel { get; set; }
         VariablePanel YVariablePanel { get; set; }
@@ -18,23 +20,48 @@ namespace Lab1.WavePatternElements
         VariablePanel AngleVariablePanel { get; set; }
         Button DeleteButton { get; set; }
         public int Number { get; private set; }
-        public Vector Vector { get; private set; }
+        public Vector Vector { get => _vector; private set => _vector = value; }
         public event Action<VectorPanel, Vector> VectorChanged;
         public event Action<VectorPanel> VectorDeleted;
 
-        public void UpdateNumber(int number)
+
+        public void SetX(int value)
+        {
+            _vector.DisplayX = value;
+            SetVector(_vector);
+        }
+        public void SetY(int value)
+        {
+            _vector.DisplayY = value;
+            SetVector(_vector);
+        }
+        public void SetLength(int value)
+        {
+            _vector.DisplayLength = value;
+            SetVector(_vector);
+        }
+        public void SetAngleDegrees(int value)
+        {
+            _vector.AngleDegrees = value;
+            SetVector(_vector);
+        }
+        public void SetNumber(int number)
         {
             Number = number;
             NumberLabel.Text = Number.ToString();
         }
-        private void updateVector(Vector vector)
+        public void SetVector(Vector vector)
         {
-            Vector = vector;
+            if (vector!=Vector)
+            {
+                Vector = vector;
+            }
             XVariablePanel.SetValue(vector.DisplayPoint.X);
             YVariablePanel.SetValue(vector.DisplayPoint.Y);
             LengthVariablePanel.SetValue(vector.DisplayLength);
             AngleVariablePanel.SetValue(vector.AngleDegrees);
         }
+
         public VectorPanel(int number, Vector vector, int max)
         {
             Number = number;
@@ -83,7 +110,7 @@ namespace Lab1.WavePatternElements
 
         }
 
-        private VariablePanel createVariablePanel(string name,int value,int min,int max)
+        private VariablePanel createVariablePanel(string name, int value, int min, int max)
         {
             VariablePanel variablePanel = new VariablePanel(name, value, min, max);
             variablePanel.Dock = DockStyle.Top;
@@ -93,13 +120,13 @@ namespace Lab1.WavePatternElements
         }
         private void DeleteButton_Click(object sender, EventArgs e)
         {
-            VectorDeleted?.Invoke(this);
+            Delete();
         }
         private void Delete()
         {
             VectorDeleted?.Invoke(this);
         }
-        private void VariablePanel_ValueChanged(object sender, int value)
+        private void VariablePanel_ValueChanged(object sender, int value,int oldValue)
         {
             Type expType = typeof(VariablePanel);
             if (sender != null && sender.GetType() == expType)
@@ -130,7 +157,7 @@ namespace Lab1.WavePatternElements
                 if (ind)
                 {
                     VectorChanged?.Invoke(this, vector);
-                    updateVector(vector);
+                    SetVector(vector);
                 }
 
             }

@@ -28,11 +28,31 @@ namespace Lab1
         }
         private void initGui()
         {
-            VectorsControlPanel = new VectorsControlPanel(WavePattern.Vectors, WavePattern.maxDisplay);
+            VectorsControlPanel = new VectorsControlPanel(WavePattern.Vectors, WavePattern.maxDisplay,WavePattern.displayScale);
             VectorsControlPanel.Dock = DockStyle.Fill;
             VectorsControlPanel.VectorChanged += VectorsControlPanel_VectorChanged;
-            VectorsControlPanel.VectorDeleted += VectorsControlPanel_VectorDeleted; ;
+            VectorsControlPanel.VectorsChanged += VectorsControlPanel_VectorsChanged;
+            VectorsControlPanel.VectorDeleted += VectorsControlPanel_VectorDeleted;
+            VectorsControlPanel.VectorCreated += VectorsControlPanel_VectorCreated;
             splitContainer1.Panel1.Controls.Add(VectorsControlPanel);
+        }
+
+        private void VectorsControlPanel_VectorsChanged(object sender, Dictionary<int, Vector> vectors)
+        { 
+            if (sender?.GetType() == VectorsControlPanel.GetType())
+            {
+                WavePattern.ChangeVectors(vectors);
+                DrawVectors();
+            }
+        }
+
+        private void VectorsControlPanel_VectorCreated(object sender, Vector vector)
+        {
+            if (sender?.GetType() == VectorsControlPanel.GetType())
+            {
+                WavePattern.AddVector(vector);
+                DrawVectors();
+            }
         }
 
         private void VectorsControlPanel_VectorDeleted(object sender, int index)

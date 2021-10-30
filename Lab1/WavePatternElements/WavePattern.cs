@@ -19,7 +19,7 @@ namespace Lab1
         public static readonly double maxW = getW(minT);
         public static readonly double minW = getW(maxT);
         public int maxDisplay = 600;
-        float displayScale;
+        public float displayScale;
 
         static double getT(double w)
         {
@@ -73,9 +73,11 @@ namespace Lab1
                 MathUtils.DrawAxis(graphics, width, height);
                 PointF axisCenter = new PointF(width / 2, height / 2);
                 Pen pen = new Pen(Color.OrangeRed, 3f);
+                int number = 0;
                 foreach (var vector in Vectors)
                 {
-                    MathUtils.DrawArrow(graphics, pen, axisCenter, vector.DisplayPoint.ToPointF().Sum(axisCenter), 20);
+                    MathUtils.DrawVector(graphics, pen, axisCenter, vector.DisplayPoint.ToPointF().Sum(axisCenter), 20,number);
+                    number++;
                 }
             }
         }
@@ -99,6 +101,14 @@ namespace Lab1
             if (index >= 0 && index < Vectors.Count && vector != Vector.Empty)
             {
                 Vectors[index] = vector;
+            }
+        }
+
+        public void ChangeVectors(Dictionary<int,Vector> vectors)
+        {
+            foreach (var keyValue in vectors)
+            {
+                ChangeVector(keyValue.Key, keyValue.Value);
             }
         }
     }

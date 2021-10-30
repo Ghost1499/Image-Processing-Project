@@ -14,8 +14,12 @@ namespace Lab1.WavePatternElements
         private PointD _valuePoint;
 
         public PointD ValuePoint { get => _valuePoint; set => _valuePoint = value; }
-        public float Scale { get; }
-        public Point DisplayPoint { get=>ValueToDisplay(ValuePoint);}
+        public double ValueX { get => ValuePoint.X; set => _valuePoint.X = value; }
+        public double ValueY { get => ValuePoint.Y; set => _valuePoint.Y = value; }
+        public float Scale { get; set; }
+        public Point DisplayPoint { get => ValueToDisplay(ValuePoint); set => ValuePoint = DisplayToValue(value); }
+        public int DisplayX { get => DisplayPoint.X; set => ValueX=DisplayToValue(value); }
+        public int DisplayY { get => DisplayPoint.Y; set => ValueY = DisplayToValue(value); }
         public double ValueLength
         {
             get => ValuePoint.GetLength();
@@ -37,8 +41,8 @@ namespace Lab1.WavePatternElements
                 _valuePoint.Y = length * Math.Sin(value);
             }
         }
-        public int AngleDegrees { get => ValuePoint.GetAngleDegrees(); }
-        public int DisplayLength { get =>Convert.ToInt32(((PointD)DisplayPoint).GetLength()); }
+        public int AngleDegrees { get => ValuePoint.GetAngleDegrees(); set => Angle = MathUtils.DegreesToRadians(value); }
+        public int DisplayLength { get => Convert.ToInt32(((PointD)DisplayPoint).GetLength()); set => ValueLength = DisplayToValue(value); }
 
         public Vector(PointD point, float scale)
         {
@@ -66,7 +70,7 @@ namespace Lab1.WavePatternElements
         {
             return (PointD)display/ Scale;
         }
-        public float DisplayToValue(int display)
+        public double DisplayToValue(int display)
         {
             return display/Scale;
         }

@@ -192,10 +192,15 @@ namespace Lab1.Utils
             DrawArrow(graphics, pen, yStartPoint, yEndPoint, 20);
 
         }
-        public static void DrawScaledVector(Graphics graphics,PointF location,PointF start,float scale)
+        public static void DrawVector(Graphics graphics, Pen pen, PointF start, PointF end, float arrowLength,int number)
         {
-            Pen pen = new Pen(Color.OrangeRed, 3f);
-            DrawArrow(graphics, pen, start, new PointF(start.X +location.X*scale,start.Y+location.Y*scale),20);
+            DrawArrow(graphics, pen, start,end,arrowLength);
+            string drawString = number.ToString();
+            System.Drawing.Font drawFont = new System.Drawing.Font("Arial", 16);
+            System.Drawing.SolidBrush drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.DarkViolet);
+            graphics.DrawString(drawString, drawFont, drawBrush, end);
+            drawFont.Dispose();
+            drawBrush.Dispose();
         }
 
         public static void DrawArrow(Graphics graphics,Pen pen, PointF start,PointF end,float arrowLength)

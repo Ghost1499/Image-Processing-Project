@@ -13,8 +13,9 @@ namespace Lab1.WavePatternElements
         Label NameLabel { get; }
         TextBox TextBox { get; }
         TrackBar TrackBar { get; }
-        public event Action<object,int> ValueChanged;
+        public event Action<object,int,int> ValueChanged;
         int value;
+        int? oldValue=null;
 
         public VariablePanel(string name,int value,int min, int max)
         {
@@ -34,8 +35,16 @@ namespace Lab1.WavePatternElements
         public void SetValue(int value)
         {
             this.value = value;
-            if (TrackBar != null && value <= TrackBar.Maximum && value >= TrackBar.Minimum)
-                TrackBar.Value = value;
+            if (TrackBar != null) {
+                if (value > TrackBar.Maximum)
+                {
+                    TrackBar.Maximum = value;
+                }
+                else if (value < TrackBar.Minimum)
+                {
+                    TrackBar.Minimum = value;
+                }
+                TrackBar.Value = value; }
             if (TextBox != null ) 
                 TextBox.Text = value.ToString();
         }
@@ -83,8 +92,11 @@ namespace Lab1.WavePatternElements
         }
         void changeValue(object sender,int value)
         {
-            ValueChanged?.Invoke(sender,value);
+            if (oldValue is null)
+                oldValue = value;
+            ValueChanged?.Invoke(sender,value,(int)oldValue);
             SetValue(value);
+            oldValue = value;
         }
         static int floatToInt(float value)
         {
