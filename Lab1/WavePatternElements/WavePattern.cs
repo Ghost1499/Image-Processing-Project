@@ -52,12 +52,13 @@ namespace Lab1
             {
                 for (int x = 0; x < width; x++)
                 {
-                    double cos = 1;
+                    double cos = 0;
                     foreach (var vector in Vectors)
                     {
-                        cos *= Math.Cos(vector.ValuePoint.X * x + vector.ValuePoint.Y * y);
+                        cos += Math.Cos(vector.ValuePoint.X * x + vector.ValuePoint.Y * y);
                     }
-
+                    cos = cos > 1 ? 1 : cos;
+                    cos = cos <0 ? 0 : cos;
                     int brightness = Convert.ToInt32(127 + 50 * cos);
                     Color color = Color.FromArgb(brightness, brightness, brightness);
                     bitmap.SetPixel(x, y, color);
