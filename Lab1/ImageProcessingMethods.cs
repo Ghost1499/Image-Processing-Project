@@ -11,6 +11,7 @@ namespace Lab1
 {
     public class ImageProcessingMethods
     {
+        public const double PI = Math.PI;
         public const int ChanelsCount = 3;
         public static double[,] flfr1 ={
                 { 1.0 / 9, 1.0 / 9, 1.0 / 9 },
@@ -62,8 +63,8 @@ namespace Lab1
         {
             int width = source.Width, height = source.Height, kwidth = kernel.GetLength(1), kheight = kernel.GetLength(0);
             Bitmap result = new Bitmap(width, height);
-            for (int x = 0; x < width; x++)
-                for (int y = 0; y < height; y++)
+            for (int y = 0; y < height; y++)
+                for (int x = 0; x < width; x++)
                 {
                     double[] res = { 0, 0, 0 };
                     for (int xi = 0; xi < kwidth; xi++)
@@ -150,15 +151,48 @@ namespace Lab1
             return result;
             
         }
+        public static Bitmap Locus()
+        {
+            Bitmap bmp = new Bitmap(256, 256);
+            for (int g = 0; g < 256; g++)
+                for (int r = 0; r < 256 - g; r++)
+                {
+                    int b = 255 - r - g;
+                    double dr = r - 256.0 / 3, dg = g - 256.0 / 3;
 
-        //public static Bitmap WavePattern(Size size)
-        //{
-        //    return WavePattern(size.Width, size.Height);
-        //}
-        //public static Bitmap WavePattern(int width,int height)
-        //{
-        //    Bitmap source = new Bitmap(width,height);
-            
-        //}
+                    int d = 100 - Convert.ToInt32(Math.Sqrt(dr * dr + dg * dg));
+                    int r1 = r + d, g1 = g + d, b1 = b + d;
+                    if (r1 < 0) r1 = 0; else if (r1 > 255) r1 = 255;
+                    if (g1 < 0) g1 = 0; else if (g1 > 255) g1 = 255;
+                    if (b1 < 0) b1 = 0; else if (b1 > 255) b1 = 255;
+
+
+                    Color c1 = Color.FromArgb(r1, g1, b1);
+                    bmp.SetPixel(r, g, c1);
+                }
+            return bmp;
+        }
+
+        public static void DrawLFMWave(Bitmap bitmap)
+        {
+            int width = bitmap.Width, height = bitmap.Height;
+            double dT = 1; // период дискретизации для экрана - 1 пиксель (?)
+            // du >= 2*umax
+            // 2PI/dT>=2*umax (du=2PI/dT)
+            // PI/dT>= C*xmax=C*(width-1)  (umax=C*xmax, xmax=width-1)
+            // Cmax= PI/dT/(width-1)
+            double du = 1.0/ dT;
+            double u, v = 0, C = du/(width-1), D = 0;// D=0  по условию, что в правой части u=0;
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    u = C * x + D;
+                    int brightness = Convert.ToInt32(127+127 * Math.Sin(u*x));
+                    Color color = Color.FromArgb(brightness, brightness, brightness);
+                    bitmap.SetPixel(x, y, color);
+                }
+            }
+        }
     }
 }

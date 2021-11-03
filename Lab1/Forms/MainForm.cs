@@ -25,6 +25,7 @@ namespace Lab1
             openFileDialog1.Filter = "Image files (*.jpg;*.jpeg)|*.jpg;*jpeg|Bitmap files (*.bmp)|*.bmp|All Files (*.*)|*.*";
             kernel = ImageProcessingMethods.sobelFilterdx;
 
+
         }
 
 
@@ -126,36 +127,24 @@ namespace Lab1
             //MessageBox.Show("Файл открыт");
         }
 
-        private Bitmap Locus()
-        {
-            Bitmap bmp = new Bitmap(256, 256);
-            for (int g = 0; g < 256; g++)
-                for (int r = 0; r < 256 - g; r++)
-                {
-                    int b = 255 - r - g;
-                    double dr = r - 256.0 / 3, dg = g - 256.0 / 3;
 
-                    int d = 100 - Convert.ToInt32(Math.Sqrt(dr * dr + dg * dg));
-                    int r1 = r + d, g1 = g + d, b1 = b + d;
-                    if (r1 < 0) r1 = 0; else if (r1 > 255) r1 = 255;
-                    if (g1 < 0) g1 = 0; else if (g1 > 255) g1 = 255;
-                    if (b1 < 0) b1 = 0; else if (b1 > 255) b1 = 255;
-
-
-                    Color c1 = Color.FromArgb(r1, g1, b1);
-                    bmp.SetPixel(r, g, c1);
-                }
-            return bmp;
-        }
 
         private void LocusRGBbutton_Click(object sender, EventArgs e)
         {
-            resultPictureBox.Image = Locus();
+            resultPictureBox.Image = ImageProcessingMethods.Locus();
         }
 
         private void mainSplitContainer_Panel2_Paint(object sender, PaintEventArgs e)
         {
-            //wavePatternButton_Click(this, null);
+            drawLFMWaveButton.PerformClick();
+
+        }
+
+        private void drawLFMWavebutton_Click(object sender, EventArgs e)
+        {
+            Bitmap bitmap = new Bitmap(mainSplitContainer.Panel2.Width, mainSplitContainer.Panel2.Height);
+            ImageProcessingMethods.DrawLFMWave(bitmap);
+            resultPictureBox.Image = bitmap;
         }
     }
 

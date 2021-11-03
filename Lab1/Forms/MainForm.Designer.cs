@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.drawLFMWaveButton = new System.Windows.Forms.Button();
             this.locusRGBbutton = new System.Windows.Forms.Button();
             this.saveResultButton = new System.Windows.Forms.Button();
             this.saveSourceButton = new System.Windows.Forms.Button();
@@ -52,6 +53,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.drawLFMWaveButton);
             this.panel1.Controls.Add(this.locusRGBbutton);
             this.panel1.Controls.Add(this.saveResultButton);
             this.panel1.Controls.Add(this.saveSourceButton);
@@ -64,6 +66,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1139, 87);
             this.panel1.TabIndex = 0;
+            // 
+            // drawLFMWaveButton
+            // 
+            this.drawLFMWaveButton.Location = new System.Drawing.Point(471, 23);
+            this.drawLFMWaveButton.Name = "drawLFMWaveButton";
+            this.drawLFMWaveButton.Size = new System.Drawing.Size(123, 44);
+            this.drawLFMWaveButton.TabIndex = 7;
+            this.drawLFMWaveButton.Text = "LFM Wave";
+            this.drawLFMWaveButton.UseVisualStyleBackColor = true;
+            this.drawLFMWaveButton.Click += new System.EventHandler(this.drawLFMWavebutton_Click);
             // 
             // locusRGBbutton
             // 
@@ -230,6 +242,7 @@
         private System.Windows.Forms.Button saveResultButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button locusRGBbutton;
+        private System.Windows.Forms.Button drawLFMWaveButton;
     }
 }
 
