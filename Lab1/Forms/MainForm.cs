@@ -136,7 +136,7 @@ namespace Lab1
 
         private void mainSplitContainer_Panel2_Paint(object sender, PaintEventArgs e)
         {
-            drawLFMWaveButton.PerformClick();
+            //drawLFMWaveButton.PerformClick();
 
         }
 

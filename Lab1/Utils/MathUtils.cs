@@ -10,6 +10,42 @@ namespace Lab1.Utils
 {
     public static class MathUtils
     {
+        public static double[] MultiplyArrays(IList<double> array1, IList<double> array2)
+        {
+            if(array1 is null)
+            {
+                throw new ArgumentNullException(nameof(array1), "Массив равен null");
+            }
+            if (array2 is null)
+            {
+                throw new ArgumentNullException(nameof(array2), "Массив равен null");
+            }
+            int length = array1.Count;
+            if (length!=array2.Count)
+            {
+                throw new ArgumentException("Размеры массивов не совпадают", nameof(array2));
+            }
+            double[] result = new double[length];
+            for (int i = 0; i < length; i++)
+            {
+                result[i] = array1[i] * array2[i];
+            }
+            return result;
+        }
+        public static double[] MultiplyArray(IList<double> array, double value)
+        {
+            if (array is null)
+            {
+                throw new ArgumentNullException(nameof(array), "Массив равен null");
+            }
+            int length = array.Count;
+            double[] result = new double[length];
+            for (int i = 0; i < length; i++)
+            {
+                result[i] = array[i] * value;
+            }
+            return result;
+        }
         public static byte ScaleColorsMultiply(byte color1, byte color2)
         {
             byte max = Byte.MaxValue;
@@ -82,50 +118,7 @@ namespace Lab1.Utils
             return result;
         }
 
-        public static T[] MultiplyArrays<T>(T[] arr1, T[] arr2)
-        {
-            if (arr1.Length != arr2.Length)
-                throw new Exception("Размерности массивов не совпадают");
-            int length = arr1.Length;
-            T[] result = new T[length];
-            for (int i = 0; i < length; i++)
-                result[i] = Operator<T>.Multiply(arr1[i], arr2[i]);
-            return result;
-        }
-
-        public static double[] MultiplyArrays(byte[] arr1, double[] arr2)
-        {
-            double[] arr1b = arr1.Select(x => Convert.ToDouble(x)).ToArray();
-            return MultiplyArrays<double>(arr1b, arr2);
-        }
-        class Operator<T>
-        {
-            private static readonly Func<T, T, T> multiply = CreateExpression<T, T, T>(new Func<Expression, Expression, BinaryExpression>(Expression.Multiply));
-
-            public static Func<T, T, T> Multiply
-            {
-                get { return Operator<T>.multiply; }
-            }
-
-            private static Func<TArg1, TArg2, TResult> CreateExpression<TArg1, TArg2, TResult>(Func<Expression, Expression, BinaryExpression> body)
-            {
-                ParameterExpression parameterExpression1 = Expression.Parameter(typeof(TArg1), "lhs");
-                ParameterExpression parameterExpression2 = Expression.Parameter(typeof(TArg2), "rhs");
-                try
-                {
-                    return Expression.Lambda<Func<TArg1, TArg2, TResult>>(
-                        (Expression)body((Expression)parameterExpression1,
-                        (Expression)parameterExpression2),
-                        new ParameterExpression[2] { parameterExpression1, parameterExpression2 }
-                    ).Compile();
-                }
-                catch (Exception ex)
-                {
-                    string msg = ex.Message;
-                    return (Func<TArg1, TArg2, TResult>)delegate { throw new InvalidOperationException(msg); };
-                }
-            }
-        }
+ 
 
         public static Bitmap Image2Gray(Bitmap bitmap)
         {

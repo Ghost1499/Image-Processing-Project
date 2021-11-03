@@ -9,31 +9,6 @@ namespace Lab1.Utils
 {
     public static class ColorExtensions
     {
-        public static Color Multiply(this Color color1, Color color2)
-        {
-            return Color.FromArgb(MathUtils.ScaleColorsMultiply(color1.R, color2.R), MathUtils.ScaleColorsMultiply(color1.G, color2.G), MathUtils.ScaleColorsMultiply(color1.B, color2.B));
-        }
-
-        public static Color Multiply(this Color color,double value)
-        {
-            return Color.FromArgb(multiplyBytes(color.R,value),multiplyBytes(color.G,value),multiplyBytes(color.B,value));
-        }
-
-        public static double[] MultiplyArr(this Color color1, Color color2)
-        {
-            return new double[] { MathUtils.Multiply(color1.R, color2.R), MathUtils.Multiply(color1.G, color2.G), MathUtils.Multiply(color1.B, color2.B) };
-        }
-
-        public static double[] MultiplyArr(this Color color, double value)
-        {
-            return new double[] { color.R * value, color.G * value, color.B * value };
-        }
-        private static byte multiplyBytes(byte color,double value)
-        {
-            double res = color * value;
-            return Convert.ToByte(res);
-        }
-
         public static Color Sum(this Color color1, Color color2)
         {
             return Color.FromArgb(color1.R + color2.R, color1.G + color2.G, color1.B + color2.B);
@@ -42,8 +17,6 @@ namespace Lab1.Utils
         {
             return new byte[3] { color.R, color.G, color.B };
         }
-
-
     }
     public static class PointExtensions
     {

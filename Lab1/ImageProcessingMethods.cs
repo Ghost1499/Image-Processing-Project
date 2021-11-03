@@ -77,7 +77,7 @@ namespace Lab1
                                 continue;
                             }
                             Color color = source.GetPixel(x + dx, y + dy);
-                            double[] temp = color.MultiplyArr(kernel[eta, xi]);
+                            double[] temp = MathUtils.MultiplyArray(color.ToByteArray().Select(elem => (double)elem).ToArray(), kernel[eta, xi]);
                             for (int i = 0; i < res.Length; i++)
                             {
                                 res[i] += temp[i];
@@ -118,10 +118,6 @@ namespace Lab1
                 for (int x = 0; x < width; x++)
                     for (int y = 0; y < height; y++)
                     {
-                        //if (x > 300 || y > 300)
-                        //{
-                        //    sourceWrapper[x, y] = Color.MediumPurple;
-                        //}
                         double res = 0;
                         for (int xi = 0; xi < twidth; xi++)
                             for (int eta = 0; eta < theight; eta++)
