@@ -201,16 +201,17 @@ namespace Lab1.Utils
             float d = (float)(arrowLength / Math.Sqrt(2));
             graphics.DrawLine(pen, start,end);
 
-            PointF v = end.Substract(start);
-            PointF vPos = v.Rotate(Math.PI*3 /4);
-            vPos = vPos.Multiply(arrowLength / v.GetLength());
-            vPos = vPos.Sum(end);
-            PointF vNeg=v.Rotate(-Math.PI*3 / 4);
-            vNeg = vNeg.Multiply(arrowLength / v.GetLength());
-            vNeg = vNeg.Sum(end);
+            PointD v = (PointD)end-start;
+            v *= arrowLength / v.GetLength();
+            PointD vPos = v;
+            vPos.Rotate(Math.PI * 3 / 4);
+            vPos += end;
+            PointD vNeg = v;
+            vNeg.Rotate(-Math.PI*3 / 4);
+            vNeg += end;
 
-            graphics.DrawLine(pen, vPos, end);
-            graphics.DrawLine(pen, vNeg, end);
+            graphics.DrawLine(pen, (PointF)vPos, end);
+            graphics.DrawLine(pen, (PointF)vNeg, end);
         }
 
         public static void DrawLineFromPoint(Graphics graphics, Pen pen, PointF start, PointF vector)

@@ -72,12 +72,12 @@ namespace Lab1
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
                 MathUtils.DrawAxis(graphics, width, height);
-                PointF axisCenter = new PointF(width / 2, height / 2);
+                Point axisCenter = new Point(width / 2, height / 2);
                 Pen pen = new Pen(Color.OrangeRed, 3f);
                 int number = 0;
                 foreach (var vector in Vectors)
                 {
-                    MathUtils.DrawVector(graphics, pen, axisCenter, vector.DisplayPoint.ToPointF().Sum(axisCenter), 20,number);
+                    MathUtils.DrawVector(graphics, pen, axisCenter, (PointF)(((PointD)vector.DisplayPoint)+ axisCenter), 20,number);
                     number++;
                 }
             }

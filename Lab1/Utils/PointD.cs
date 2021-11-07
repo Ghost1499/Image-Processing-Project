@@ -55,7 +55,15 @@ namespace Lab1.Utils
         {
             return new Point(Convert.ToInt32(point.X), Convert.ToInt32(point.Y));
         }
+        public static explicit operator PointF(PointD point)
+        {
+            return new PointF(Convert.ToSingle(point.X), Convert.ToSingle(point.Y));
+        }
         public static implicit operator PointD(Point point)
+        {
+            return new PointD(point.X, point.Y);
+        }
+        public static implicit operator PointD(PointF point)
         {
             return new PointD(point.X, point.Y);
         }
