@@ -189,6 +189,8 @@ namespace Lab1
                     bitmap.SetPixel(x, y, color);
                 }
             }
+            //Graphics graphics = Graphics.FromImage(bitmap);
+            //graphics.DrawLine(new Pen(Color.AliceBlue,3), width / 2, height / 2,0,height/2);
         }
     }
 }
