@@ -71,13 +71,13 @@ namespace Lab1
             int width = bitmap.Width, height = bitmap.Height;
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
-                MathUtils.DrawAxis(graphics, width, height);
+                DrawingUtils.DrawAxis(graphics,new RectangleF(0,0,width, height));
                 Point axisCenter = new Point(width / 2, height / 2);
                 Pen pen = new Pen(Color.OrangeRed, 3f);
                 int number = 0;
                 foreach (var vector in Vectors)
                 {
-                    MathUtils.DrawVector(graphics, pen, axisCenter, (PointF)(((PointD)vector.DisplayPoint)+ axisCenter), 20,number);
+                    DrawingUtils.DrawVector(graphics, pen, axisCenter, (PointF)(((PointD)vector.DisplayPoint)+ axisCenter), 20,number);
                     number++;
                 }
             }

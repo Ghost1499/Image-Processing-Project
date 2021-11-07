@@ -113,7 +113,7 @@ namespace Lab1
             using (ImageWrapper sourceWrapper = new ImageWrapper(result, true))
             using (ImageWrapper targetWrapper = new ImageWrapper(target, false, ImageLockMode.ReadOnly))
             {
-                int colorsSum = MathUtils.BitmapColorsSumGray(targetWrapper);
+                int colorsSum = ImageProcessingUtils.BitmapColorsSumGray(targetWrapper);
                 int colorsAvg = colorsSum / twidth / theight;
                 for (int x = 0; x < width; x++)
                     for (int y = 0; y < height; y++)

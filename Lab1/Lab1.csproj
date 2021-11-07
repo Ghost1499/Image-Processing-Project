@@ -46,7 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Utils\DrawingUtils.cs" />
     <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Utils\ImageProcessingUtils.cs" />
     <Compile Include="Utils\ImageWrapper.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>

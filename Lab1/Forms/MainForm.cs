@@ -54,9 +54,9 @@ namespace Lab1
         private void correlationButton_Click(object sender, EventArgs e)
         {
             Bitmap source = this.source;
-            Bitmap sourceGray = MathUtils.IsGray(source) ? source : MathUtils.Image2Gray(source);
+            Bitmap sourceGray = ImageProcessingUtils.IsGray(source) ? source : ImageProcessingUtils.Image2Gray(source);
             Bitmap target = openImage();
-            Bitmap targetGray = MathUtils.IsGray(target) ? source : MathUtils.Image2Gray(target);
+            Bitmap targetGray = ImageProcessingUtils.IsGray(target) ? source : ImageProcessingUtils.Image2Gray(target);
 
             Bitmap result = ImageProcessingMethods.Correlation(source, target);
             sourcePictureBox.Image = sourceGray;
