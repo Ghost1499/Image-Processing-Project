@@ -9,13 +9,18 @@ namespace Lab1.Utils
 {
     public static class DrawingUtils
     {
-        public static void DrawAxis(Graphics graphics,RectangleF rectangle,Pen pen=null,float arrowLength=20)
+        public static void DrawAxis(Graphics graphics, RectangleF rectangle,PointF axisCenter, Pen pen=null,float arrowLength=20)
         {
+            if (!rectangle.Contains(axisCenter))
+            {
+                throw new Exception("Область для рисования не содержит точку центра координат");
+            }
             if(pen is null)
             {
                 pen = new Pen(Color.Blue, 1.5f);
             }
-            PointF xStartPoint = new PointF(rectangle.Left,rectangle.Y+rectangle.Height / 2), yStartPoint = new PointF(rectangle.X +rectangle.Width / 2, rectangle.Top), xEndPoint = new PointF(rectangle.X+rectangle.Width-1,rectangle.Y +rectangle.Height/2), yEndPoint = new PointF(rectangle.X +rectangle.Width/2, rectangle.Y+rectangle.Height-1);
+            PointF xStartPoint = new PointF(rectangle.X,axisCenter.Y), yStartPoint = new PointF(axisCenter.X, rectangle.Y), xEndPoint = new PointF(rectangle.X+rectangle.Width-1,rectangle.Y +axisCenter.Y), yEndPoint = new PointF(rectangle.X +axisCenter.X, rectangle.Y+rectangle.Height-1);
+            //PointF xStartPoint = new PointF(rectangle.Left,rectangle.Y+rectangle.Height / 2), yStartPoint = new PointF(rectangle.X +rectangle.Width / 2, rectangle.Top), xEndPoint = new PointF(rectangle.X+rectangle.Width-1,rectangle.Y +rectangle.Height/2), yEndPoint = new PointF(rectangle.X +rectangle.Width/2, rectangle.Y+rectangle.Height-1);
             DrawArrow(graphics, pen, xStartPoint, xEndPoint, arrowLength);
             DrawArrow(graphics, pen, yStartPoint, yEndPoint, arrowLength);
 

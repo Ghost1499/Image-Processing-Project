@@ -45,43 +45,6 @@ namespace Lab1
             vector45n.Rotate(-45);
             Vectors = new List<Vector> { vector0, vector90, vector45, vector45n };
         }
-        public void DrawPattern(Bitmap bitmap)
-        {
-            int width = bitmap.Width, height = bitmap.Height;
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    double cos = 0;
-                    foreach (var vector in Vectors)
-                    {
-                        cos += Math.Cos(vector.ValuePoint.X * x + vector.ValuePoint.Y * y);
-                    }
-                    cos = cos > 1 ? 1 : cos;
-                    cos = cos <0 ? 0 : cos;
-                    int brightness = Convert.ToInt32(127 + 50 * cos);
-                    Color color = Color.FromArgb(brightness, brightness, brightness);
-                    bitmap.SetPixel(x, y, color);
-                }
-            }
-        }
-
-        public void DrawVectors(Bitmap bitmap)
-        {
-            int width = bitmap.Width, height = bitmap.Height;
-            using (Graphics graphics = Graphics.FromImage(bitmap))
-            {
-                DrawingUtils.DrawAxis(graphics,new RectangleF(0,0,width, height));
-                Point axisCenter = new Point(width / 2, height / 2);
-                Pen pen = new Pen(Color.OrangeRed, 3f);
-                int number = 0;
-                foreach (var vector in Vectors)
-                {
-                    DrawingUtils.DrawVector(graphics, pen, axisCenter, (PointF)(((PointD)vector.DisplayPoint)+ axisCenter), 20,number);
-                    number++;
-                }
-            }
-        }
 
         public void AddVector(Vector vector)
         {

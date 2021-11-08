@@ -13,18 +13,18 @@ namespace Lab1
 {
     public partial class WavePatternForm : Form
     {
-        Bitmap Bitmap { get; set; }
-        Bitmap WaveBitmap { get; set; }
         WavePattern WavePattern { get; set; }
+        WavePatternDrawer WavePatternDrawer { get; set; }
         VectorsControlPanel VectorsControlPanel { get; set; }
 
         public WavePatternForm()
         {
             InitializeComponent();
-            int maxDisplay = imagePanel.Width > imagePanel.Height ? imagePanel.Height / 2 : imagePanel.Width / 2;
-            maxDisplay = 400;
-            WavePattern = new WavePattern(maxDisplay);
-            initGui();
+            init();
+        }
+        private void init()
+        {
+            WavePatternDrawer = new WavePatternDrawer();
         }
         private void initGui()
         {
@@ -36,13 +36,22 @@ namespace Lab1
             VectorsControlPanel.VectorCreated += VectorsControlPanel_VectorCreated;
             splitContainer1.Panel1.Controls.Add(VectorsControlPanel);
         }
-
+        public void DrawAll()
+        {
+            WavePatternDrawer.DrawWavePattern(WavePattern.Vectors);
+            DrawAxisGui();
+        }
+        public void DrawAxisGui()
+        {
+            WavePatternDrawer.UpdateAxisGui(WavePattern.Vectors);
+            mainPictureBox.Image = WavePatternDrawer.CurrentBitmap;
+        }
         private void VectorsControlPanel_VectorsChanged(object sender, Dictionary<int, Vector> vectors)
         { 
             if (sender?.GetType() == VectorsControlPanel.GetType())
             {
                 WavePattern.ChangeVectors(vectors);
-                DrawVectors();
+                DrawAxisGui();
             }
         }
 
@@ -51,7 +60,7 @@ namespace Lab1
             if (sender?.GetType() == VectorsControlPanel.GetType())
             {
                 WavePattern.AddVector(vector);
-                DrawVectors();
+                DrawAxisGui();
             }
         }
 
@@ -60,7 +69,7 @@ namespace Lab1
             if (sender?.GetType() == VectorsControlPanel.GetType())
             {
                 WavePattern.RemoveVector(index);
-                DrawVectors();
+                DrawAxisGui();
             }
         }
 
@@ -69,51 +78,40 @@ namespace Lab1
             if (sender?.GetType() == VectorsControlPanel.GetType())
             {
                 WavePattern.ChangeVector(index, vector);
-                DrawVectors();
+                DrawAxisGui();
             }
         }
-        public void DrawAll()
-        {
-            drawWavePattern();
-            DrawVectors();
-
-        }
-        private void drawWavePattern()
-        {
-            if(WaveBitmap is null)
-                WaveBitmap = new Bitmap(imagePanel.Width, imagePanel.Height);
-            WavePattern.DrawPattern(WaveBitmap);
-            //mainPictureBox.Image = WaveBitmap;
-            //WaveBitmap = new Bitmap(Bitmap);
-        }
-
-        private void DrawVectors()
-        {
-            Bitmap oldBitmap = Bitmap;
-            Bitmap = (Bitmap)WaveBitmap.Clone();
-            oldBitmap?.Dispose();
-            WavePattern.DrawVectors(Bitmap);
-
-            mainPictureBox.Image = Bitmap;
-        }
-
 
         private void drawWavePatternButton_Click(object sender, EventArgs e)
         {
             DrawAll();
         }
-        
+
         private void mainPictureBox_Paint(object sender, PaintEventArgs e)
         {
-            if (Bitmap is null)
+            if (WavePattern is null)
+            {
+                int maxDisplay = mainPictureBox.Width > mainPictureBox.Height ? mainPictureBox.Height / 2 : mainPictureBox.Width / 2;
+                WavePattern = new WavePattern(maxDisplay);
+                initGui();
+            }
+            if (!WavePatternDrawer.SizeSet)
+                WavePatternDrawer.SetSize(mainPictureBox.Size);
+            if (WavePatternDrawer.CurrentBitmap is null)
+            {
                 DrawAll();
+            }
         }
 
+        private void mainPictureBox_Resize(object sender, EventArgs e)
+        {
+            
+        }
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == Keys.Enter)
             {
-                DrawAll();
+                WavePatternDrawer.UpdateAxisGui(WavePattern.Vectors);
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }

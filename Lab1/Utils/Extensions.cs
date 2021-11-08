@@ -32,5 +32,22 @@ namespace Lab1.Utils
             return new byte[3] { color.R, color.G, color.B };
         }
     }
-    
+
+    public static class RectangleFExtensions
+    {
+        public static PointF GetCenter(this RectangleF rectangleF)
+        {
+            return new PointF(rectangleF.X + rectangleF.Width / 2, rectangleF.Y + rectangleF.Height / 2);
+        }
+    }
+    public static class RectangleExtensions
+    {
+        public static Point GetCenter(this Rectangle rectangle)
+        {
+            return new Point(rectangle.X + rectangle.Width / 2, rectangle.Y + rectangle.Height / 2);
+        }
+    }
+
+
+
 }

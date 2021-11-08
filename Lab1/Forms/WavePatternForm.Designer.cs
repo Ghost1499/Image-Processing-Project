@@ -66,6 +66,7 @@ namespace Lab1
             this.mainPictureBox.TabIndex = 0;
             this.mainPictureBox.TabStop = false;
             this.mainPictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.mainPictureBox_Paint);
+            this.mainPictureBox.Resize += new System.EventHandler(this.mainPictureBox_Resize);
             // 
             // mainSplitContainer
             // 
