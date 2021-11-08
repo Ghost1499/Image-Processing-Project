@@ -13,16 +13,19 @@ namespace Lab1.WavePatternElements
         Label NameLabel { get; }
         TextBox TextBox { get; }
         TrackBar TrackBar { get; }
+        public int TickFreq { get; }
+
         public event Action<object,int,int> ValueChanged;
         int value;
         int? oldValue=null;
 
-        public VariablePanel(string name,int value,int min, int max)
+        public VariablePanel(string name,int value,int min, int max, int tickFreq=15)
         {
             
             NameLabel = createNameLabel(name);
             TextBox = createTextBox(value);
             TrackBar = createTrackbar(min,max,value);
+            TickFreq = tickFreq;
             SetValue(value);
 
             Height = TextBox.Height*2;
@@ -94,7 +97,10 @@ namespace Lab1.WavePatternElements
         {
             if (oldValue is null)
                 oldValue = value;
-            ValueChanged?.Invoke(sender,value,(int)oldValue);
+            int oldVal = (int)oldValue;
+            if (Math.Abs(value - oldVal) <TickFreq)
+                return;
+            ValueChanged?.Invoke(sender, value, oldVal);
             SetValue(value);
             oldValue = value;
         }

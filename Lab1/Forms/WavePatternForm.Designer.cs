@@ -32,12 +32,9 @@ namespace Lab1
         private void InitializeComponent()
         {
             this.imagePanel = new System.Windows.Forms.Panel();
-            this.mainPictureBox = new System.Windows.Forms.PictureBox();
             this.mainSplitContainer = new System.Windows.Forms.SplitContainer();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.drawWavePatternButton = new System.Windows.Forms.Button();
-            this.imagePanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).BeginInit();
             this.mainSplitContainer.Panel1.SuspendLayout();
             this.mainSplitContainer.Panel2.SuspendLayout();
@@ -50,23 +47,12 @@ namespace Lab1
             // imagePanel
             // 
             this.imagePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.imagePanel.Controls.Add(this.mainPictureBox);
             this.imagePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.imagePanel.Location = new System.Drawing.Point(0, 0);
             this.imagePanel.Name = "imagePanel";
             this.imagePanel.Size = new System.Drawing.Size(758, 580);
             this.imagePanel.TabIndex = 0;
-            // 
-            // mainPictureBox
-            // 
-            this.mainPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainPictureBox.Location = new System.Drawing.Point(0, 0);
-            this.mainPictureBox.Name = "mainPictureBox";
-            this.mainPictureBox.Size = new System.Drawing.Size(756, 578);
-            this.mainPictureBox.TabIndex = 0;
-            this.mainPictureBox.TabStop = false;
-            this.mainPictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.mainPictureBox_Paint);
-            this.mainPictureBox.Resize += new System.EventHandler(this.mainPictureBox_Resize);
+            this.imagePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.imagePanel_Paint);
             // 
             // mainSplitContainer
             // 
@@ -124,8 +110,6 @@ namespace Lab1
             this.Name = "WavePatternForm";
             this.Text = "WavePatternForm";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.imagePanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.mainPictureBox)).EndInit();
             this.mainSplitContainer.Panel1.ResumeLayout(false);
             this.mainSplitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).EndInit();
@@ -142,7 +126,6 @@ namespace Lab1
         #endregion
 
         private System.Windows.Forms.Panel imagePanel;
-        private System.Windows.Forms.PictureBox mainPictureBox;
         private System.Windows.Forms.SplitContainer mainSplitContainer;
         private System.Windows.Forms.Button drawWavePatternButton;
         private System.Windows.Forms.SplitContainer splitContainer1;

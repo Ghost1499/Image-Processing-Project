@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -24,6 +25,7 @@ namespace Lab1
         }
         private void init()
         {
+            typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,null, imagePanel, new object[] { true });
             WavePatternDrawer = new WavePatternDrawer();
         }
         private void initGui()
@@ -44,8 +46,8 @@ namespace Lab1
         public void DrawAxisGui()
         {
             WavePatternDrawer.UpdateAxisGui(WavePattern.Vectors);
-            mainPictureBox.Image = WavePatternDrawer.CurrentBitmap;
-            //GC.Collect();
+            //this.BackgroundImage = WavePatternDrawer.CurrentBitmap;
+            imagePanel.BackgroundImage = WavePatternDrawer.CurrentBitmap;
         }
         private void VectorsControlPanel_VectorsChanged(object sender, Dictionary<int, Vector> vectors)
         { 
@@ -88,27 +90,6 @@ namespace Lab1
             DrawAll();
         }
 
-        private void mainPictureBox_Paint(object sender, PaintEventArgs e)
-        {
-            if (WavePattern is null)
-            {
-                int maxDisplay = mainPictureBox.Width > mainPictureBox.Height ? mainPictureBox.Height / 2 : mainPictureBox.Width / 2;
-                WavePattern = new WavePattern(maxDisplay);
-                initGui();
-            }
-            if (!WavePatternDrawer.SizeSet)
-                WavePatternDrawer.SetSize(mainPictureBox.Size);
-            if (WavePatternDrawer.CurrentBitmap is null)
-            {
-                DrawAll();
-                mainPictureBox.Paint -= mainPictureBox_Paint;
-            }
-        }
-
-        private void mainPictureBox_Resize(object sender, EventArgs e)
-        {
-            
-        }
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == Keys.Enter)
@@ -118,5 +99,22 @@ namespace Lab1
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
+        private void imagePanel_Paint(object sender, PaintEventArgs e)
+        {
+            Panel panel = sender as Panel;
+            if (WavePattern is null)
+            {
+                int maxDisplay = panel.Width > panel.Height ? panel.Height / 2 : panel.Width / 2;
+                WavePattern = new WavePattern(maxDisplay);
+                initGui();
+            }
+            if (!WavePatternDrawer.SizeSet)
+                WavePatternDrawer.SetSize(panel.Size);
+            if (WavePatternDrawer.CurrentBitmap is null)
+            {
+                DrawAll();
+                panel.Paint -= imagePanel_Paint;
+            }
+        }
     }
 }
