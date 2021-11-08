@@ -97,6 +97,7 @@ namespace Lab1.WavePatternElements
         {
             Vector vector = new Vector();
             vector.Scale = DisplayScale;
+            vector.DisplayLength = 100;
             VectorCreated?.Invoke(this, vector);
             addVector(vector);
         }
