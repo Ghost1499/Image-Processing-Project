@@ -45,7 +45,21 @@ namespace Lab1
             vector45n.Rotate(-45);
             Vectors = new List<Vector> { vector0, vector90, vector45, vector45n };
         }
-
+        public static int SoftBrightness(double cos)
+        {
+            cos = cos > 1 ? 1 : cos;
+            cos = cos < 0 ? 0 : cos;
+            int brightness = Convert.ToInt32(127 + 50 * cos);
+            return brightness;
+        }
+        public static int HardBrightness(double cos)
+        {
+            int value = Convert.ToInt32(127 + 50 * cos);
+            value = value > byte.MaxValue ? byte.MaxValue : value;
+            value = value < byte.MinValue ? byte.MinValue : value;
+            int brightness = Convert.ToInt32(value);
+            return brightness;
+        }
         public void AddVector(Vector vector)
         {
             if (vector != Vector.Empty)

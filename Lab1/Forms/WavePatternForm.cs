@@ -26,7 +26,7 @@ namespace Lab1
         private void init()
         {
             typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,null, imagePanel, new object[] { true });
-            WavePatternDrawer = new WavePatternDrawer();
+            WavePatternDrawer = new WavePatternDrawer(WavePattern.SoftBrightness);
         }
         private void initGui()
         {

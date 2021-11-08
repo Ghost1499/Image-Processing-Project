@@ -29,15 +29,17 @@ namespace Lab1.WavePatternElements
         public Pen AxisPen { get; set; }
         public Pen VectorsPen { get; set; }
         public Point AxisCenter { get; set; }
-
-        public WavePatternDrawer(Size bitmapSize)
+        public Func<double, int> BrightnessFunction { private get; set; }
+        public WavePatternDrawer(Size bitmapSize, Func<double, int> brightnessFunction)
         {
+            BrightnessFunction = brightnessFunction;
             SetSize(bitmapSize);
             init();
         }
 
-        public WavePatternDrawer()
+        public WavePatternDrawer(Func<double, int> brightnessFunction)
         {
+            BrightnessFunction = brightnessFunction;
             init();
         }
         private void init()
@@ -130,9 +132,7 @@ namespace Lab1.WavePatternElements
                     {
                         cos += Math.Cos(vector.ValuePoint.X * x + vector.ValuePoint.Y * y);
                     }
-                    cos = cos > 1 ? 1 : cos;
-                    cos = cos < 0 ? 0 : cos;
-                    int brightness = Convert.ToInt32(127 + 50 * cos);
+                    int brightness = BrightnessFunction(cos);
                     Color color = Color.FromArgb(brightness, brightness, brightness);
                     WavePattern.SetPixel(x, y, color);
                 }
