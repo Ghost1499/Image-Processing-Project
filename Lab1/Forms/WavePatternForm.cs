@@ -45,6 +45,7 @@ namespace Lab1
         {
             WavePatternDrawer.UpdateAxisGui(WavePattern.Vectors);
             mainPictureBox.Image = WavePatternDrawer.CurrentBitmap;
+            //GC.Collect();
         }
         private void VectorsControlPanel_VectorsChanged(object sender, Dictionary<int, Vector> vectors)
         { 
@@ -100,6 +101,7 @@ namespace Lab1
             if (WavePatternDrawer.CurrentBitmap is null)
             {
                 DrawAll();
+                mainPictureBox.Paint -= mainPictureBox_Paint;
             }
         }
 

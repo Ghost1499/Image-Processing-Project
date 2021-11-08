@@ -58,6 +58,16 @@ namespace Lab1.WavePatternElements
             //    WavePattern = new Bitmap(BitmapWidth, BitmapHeight);
             //}
         }
+        private void updateCurrentBitmap()
+        {
+            CurrentBitmap?.Dispose();
+            CurrentBitmap = (Bitmap)WavePattern.Clone();
+        }
+        private void updateGraphics()
+        {
+            CurrentGraphics?.Dispose();
+            CurrentGraphics = Graphics.FromImage(CurrentBitmap);
+        }
         private void checkSizeSet()
         {
             if (!sizeSet)
@@ -95,9 +105,9 @@ namespace Lab1.WavePatternElements
         {
             checkDisposed();
             checkSizeSet();
-            CurrentBitmap?.Dispose();
-            CurrentBitmap = (Bitmap)WavePattern.Clone();
-            CurrentGraphics = Graphics.FromImage(CurrentBitmap);
+            updateCurrentBitmap();
+            updateGraphics();
+
             DrawAxis();
             DrawVectors(vectors);
         }
@@ -144,8 +154,8 @@ namespace Lab1.WavePatternElements
             {
                 CurrentGraphics = Graphics.FromImage(CurrentBitmap);
             }
-            Graphics graphics = CurrentGraphics;
-            DrawingUtils.DrawAxis(graphics, DrawingRectangle,AxisCenter,AxisPen);
+            //Graphics graphics = CurrentGraphics;
+            DrawingUtils.DrawAxis(CurrentGraphics, DrawingRectangle,AxisCenter,AxisPen);
         }
 
         public void DrawVectors(IEnumerable<Vector> vectors)
@@ -160,11 +170,11 @@ namespace Lab1.WavePatternElements
             {
                 CurrentGraphics = Graphics.FromImage(CurrentBitmap);
             }
-            Graphics graphics = CurrentGraphics;
+            //Graphics graphics = CurrentGraphics;
             int number = 0;
             foreach (var vector in vectors)
             {
-                DrawingUtils.DrawVector(graphics, VectorsPen, AxisCenter, (PointF)(((PointD)vector.DisplayPoint) + AxisCenter), 20, number);
+                DrawingUtils.DrawVector(CurrentGraphics, VectorsPen, AxisCenter, (PointF)(((PointD)vector.DisplayPoint) + AxisCenter), 20, number);
                 number++;
             }
         }
